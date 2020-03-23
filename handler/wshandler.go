@@ -21,16 +21,6 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 	conn, _ := upgrader.Upgrade(w, r, nil)
 
 	writeMessage(conn)
-	// go publishToChannel(channel)
-	// for {
-
-	// 	msg := []byte("helloworld")
-	// 	conn.WriteMessage(1, msg)
-
-	// 	if err := conn.WriteMessage(1, msg); err != nil {
-	// 		return
-	// 	}
-	// }
 }
 
 func writeMessage(conn *websocket.Conn) {
