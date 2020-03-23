@@ -9,5 +9,5 @@ func main() {
 
 	go handler.PublishToChannel()
 	http.HandleFunc("/noti", handler.WSHandler)
-	http.ListenAndServe("0.0.0.0:7000", nil)
+	http.ListenAndServe(":7000", nil)
 }

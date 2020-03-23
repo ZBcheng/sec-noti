@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
+	"reflect"
 	"sec-noti/redishandler"
 
 	"github.com/gorilla/websocket"
@@ -13,21 +15,25 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
-var channel = make(chan string, 10)
+var channel = make(chan string, 10) // redis消息存储channel
+var connPool []*websocket.Conn      // websocket连接池
 
 // WSHandler : websocket接口
 func WSHandler(w http.ResponseWriter, r *http.Request) {
-
+	fmt.Println("hanlder init....")
 	conn, _ := upgrader.Upgrade(w, r, nil)
+	connPool = append(connPool, conn)
+	fmt.Println(reflect.TypeOf(conn))
 
-	writeMessage(conn)
+	writeMessage()
 }
 
-func writeMessage(conn *websocket.Conn) {
+// writeMessage : 向前端返回信息
+func writeMessage() {
 	for {
 		msg := <-channel
-		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
-			return
+		for _, conn := range connPool {
+			go conn.WriteMessage(1, []byte(msg))
 		}
 	}
 }
