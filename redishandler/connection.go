@@ -12,6 +12,7 @@ var client = redis.NewClient(&redis.Options{
 
 // Subscribe : 订阅频道
 func Subscribe(rdChannel string, chQueue chan string) {
+	fmt.Println("subscribing channel <" + rdChannel + ">")
 	pubsub := client.Subscribe(rdChannel)
 	if _, err := pubsub.Receive(); err != nil {
 		return
@@ -19,7 +20,7 @@ func Subscribe(rdChannel string, chQueue chan string) {
 	ch := pubsub.Channel()
 
 	for msg := range ch {
+		fmt.Println(msg.Payload)
 		chQueue <- msg.Payload
-		fmt.Println(msg.Payload, "\n")
 	}
 }

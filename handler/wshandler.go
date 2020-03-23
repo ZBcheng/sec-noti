@@ -2,6 +2,7 @@ package handler
 
 import (
 	"net/http"
+	"sec-noti/redishandler"
 
 	"github.com/gorilla/websocket"
 )
@@ -12,18 +13,36 @@ var upgrader = websocket.Upgrader{
 	},
 }
 
+var channel = make(chan string, 10)
+
 // WSHandler : websocket接口
 func WSHandler(w http.ResponseWriter, r *http.Request) {
 
 	conn, _ := upgrader.Upgrade(w, r, nil)
 
+	writeMessage(conn)
+	// go publishToChannel(channel)
+	// for {
+
+	// 	msg := []byte("helloworld")
+	// 	conn.WriteMessage(1, msg)
+
+	// 	if err := conn.WriteMessage(1, msg); err != nil {
+	// 		return
+	// 	}
+	// }
+}
+
+func writeMessage(conn *websocket.Conn) {
 	for {
-
-		msg := []byte("helloworld")
-		conn.WriteMessage(1, msg)
-
-		if err := conn.WriteMessage(1, msg); err != nil {
+		msg := <-channel
+		if err := conn.WriteMessage(1, []byte(msg)); err != nil {
 			return
 		}
 	}
+}
+
+// PublishToChannel : 发送消息到channel
+func PublishToChannel() {
+	redishandler.Subscribe("bot", channel)
 }
