@@ -3,7 +3,6 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"reflect"
 	"sec-noti/redishandler"
 
 	"github.com/gorilla/websocket"
@@ -23,7 +22,7 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("hanlder init....")
 	conn, _ := upgrader.Upgrade(w, r, nil)
 	connPool = append(connPool, conn)
-	fmt.Println(reflect.TypeOf(conn))
+	fmt.Println(connPool)
 
 	writeMessage()
 }
