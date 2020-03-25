@@ -10,8 +10,8 @@ var client = redis.NewClient(&redis.Options{
 	Addr: "localhost:6379",
 })
 
-// Subscribe : 订阅频道
-func Subscribe(rdChannel string, chQueue chan string) {
+// Publish2Channel : 订阅redis频道并发布到 go channel
+func Publish2Channel(rdChannel string, chQueue chan string) {
 	fmt.Println("subscribing channel <" + rdChannel + ">")
 	pubsub := client.Subscribe(rdChannel)
 	if _, err := pubsub.Receive(); err != nil {

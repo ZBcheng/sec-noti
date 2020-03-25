@@ -3,23 +3,13 @@ package main
 import (
 	"net/http"
 	"sec-noti/handler"
+	"sec-noti/redishandler"
 	"sec-noti/util"
 )
 
-// TODO conn回收
 func main() {
-
-	go handler.PublishToChannel()
-	go writeMessage()
+	go redishandler.Publish2Channel("bot", util.MsgChannel)
+	go util.WriteMessage()
 	http.HandleFunc("/noti", handler.WSHandler)
 	http.ListenAndServe(":7000", nil)
-}
-
-func writeMessage() {
-	for {
-		msg := <-util.MsgChannel
-		for _, conn := range util.ConnMap {
-			go conn.WriteMessage(1, []byte(msg))
-		}
-	}
 }
