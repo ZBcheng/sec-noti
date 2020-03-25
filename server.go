@@ -5,6 +5,7 @@ import (
 	"sec-noti/handler"
 )
 
+// TODO conn回收
 func main() {
 
 	go handler.PublishToChannel()
