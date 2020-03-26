@@ -1,8 +1,11 @@
 package main
 
-import "sec-noti/util"
+import (
+	"fmt"
+	"sec-noti/util"
+)
 
 func main() {
-	testMsg := []byte("world")
-	util.MD5(testMsg)
+	testMsg := " "
+	fmt.Println(util.MD5(testMsg))
 }

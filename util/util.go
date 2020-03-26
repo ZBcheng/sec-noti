@@ -5,9 +5,9 @@ import (
 )
 
 // MD5 : md5算法加密
-func MD5(rawData []byte) string {
+func MD5(rawData string) string {
 	enc := md5.New()
-	enc.Write(rawData)
-	result := enc.Sum([]byte(""))
+	enc.Write([]byte(rawData))
+	result := enc.Sum([]byte(" "))
 	return string(result)
 }

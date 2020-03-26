@@ -8,8 +8,8 @@ import (
 )
 
 func main() {
-	go redishandler.Publish2Channel("bot", util.MsgChannel)
-	go util.WriteMessage()
+	go redishandler.Publish2Channel("bot", util.MsgChannel) // 发送redis频道消息到util.MsgChannel
+	go util.WriteMessage()                                  // 从util.MsgChannel中读取消息并发送到前端
 	http.HandleFunc("/noti", handler.WSHandler)
 	http.ListenAndServe(":7000", nil)
 }

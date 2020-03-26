@@ -8,7 +8,7 @@ var ConnMap = make(map[string]*websocket.Conn)
 // MsgChannel : redis消息存储channel
 var MsgChannel = make(chan string, 10)
 
-// WriteMessage :读取MsgChannel中的消息
+// WriteMessage :读取MsgChannel中的消息并发送到前端
 func WriteMessage() {
 	for {
 		msg := <-MsgChannel
