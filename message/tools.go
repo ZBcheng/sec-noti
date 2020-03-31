@@ -19,7 +19,9 @@ var pgConn *sql.DB
 var mutex sync.Mutex
 
 var botID int
-var userIDSet []int
+
+// UserMap : postgres receiver映射
+var UserMap = make(map[string]int)
 
 // ConnMap : websocket连接映射
 var ConnMap = make(map[string]*websocket.Conn)
@@ -38,10 +40,12 @@ func init() {
 		os.Exit(1)
 	}
 
-	if userIDSet, err = getUserIDSet(); err != nil {
-		fmt.Println("Failed to get user id set, err: " + err.Error())
+	if UserMap, err = getUserMap(); err != nil {
+		fmt.Println("Failed to get user map, err: " + err.Error())
 		os.Exit(1)
 	}
+
+	fmt.Println(UserMap)
 
 }
 

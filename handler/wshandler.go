@@ -41,6 +41,14 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 		if resp.Operation == 0 {
 			// Operation == 0 means user is connecting
 			message.ConnMap[util.MD5(resp.Username)] = conn
+
+			if _, isInMap := message.UserMap[resp.Username]; !isInMap {
+				err := message.AddMember(resp.Username)
+				if err != nil {
+					fmt.Println("Failed to add memeber, err: ", err.Error())
+				}
+				fmt.Println(message.UserMap)
+			}
 			fmt.Println("user: " + resp.Username + " connected!")
 		} else if resp.Operation == 1 {
 			// Operation == 1 means user is logging out
