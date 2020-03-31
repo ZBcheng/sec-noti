@@ -1,6 +1,8 @@
 package util
 
-import "github.com/gorilla/websocket"
+import (
+	"github.com/gorilla/websocket"
+)
 
 // ConnMap : websocket连接映射
 var ConnMap = make(map[string]*websocket.Conn)

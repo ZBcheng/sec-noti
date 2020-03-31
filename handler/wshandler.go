@@ -25,16 +25,15 @@ var upgrader = websocket.Upgrader{
 func WSHandler(w http.ResponseWriter, r *http.Request) {
 	conn, _ := upgrader.Upgrade(w, r, nil)
 	for {
-		_, rawData, err := conn.ReadMessage()
+		_, data, err := conn.ReadMessage()
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
 
-		data := string(rawData)
 		resp := WebSocketResp{}
 
-		if err := json.Unmarshal([]byte(data), &resp); err != nil {
+		if err := json.Unmarshal(data, &resp); err != nil {
 			return
 		}
 
