@@ -26,21 +26,23 @@ func getBotID() (botID int, err error) {
 }
 
 // GetUserID : get id of all the users
-func getUserIDSet() (idSet []int, err error) {
-	rows, err := pgConn.Query("SELECT id FROM users_userprofile")
+func getUserMap() (userMap map[string]int, err error) {
+	userMap = make(map[string]int)
+	rows, err := pgConn.Query("SELECT id, username FROM users_userprofile")
 	if err != nil {
 		return nil, err
 	}
 	for rows.Next() {
 		var id int
-		err = rows.Scan(&id)
+		var username string
+		err = rows.Scan(&id, &username)
 		if err != nil {
 			return nil, err
 		}
-		idSet = append(idSet, id)
+		userMap[username] = id
 	}
 
-	return idSet, nil
+	return userMap, nil
 }
 
 // Save2DB : messaeg写入posgres
@@ -68,11 +70,23 @@ func save2DB(message string) (err error) {
 		return err
 	}
 
-	for _, v := range userIDSet {
-		if _, err = stmt.Exec(messageID, v); err != nil {
+	for _, id := range UserMap {
+		if _, err = stmt.Exec(messageID, id); err != nil {
 			return err
 		}
 	}
 
+	return nil
+}
+
+// AddMember : 向userMap中添加新用户
+func AddMember(username string) (err error) {
+	var userID int
+	sql := fmt.Sprintf("SELECT id FROM users_userprofile WHERE username='%s'", username)
+
+	if err = pgConn.QueryRow(sql).Scan(&userID); err != nil {
+		return err
+	}
+	UserMap[username] = userID
 	return nil
 }
