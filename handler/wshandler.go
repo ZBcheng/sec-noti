@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"sec-noti/message"
 	"sec-noti/util"
 
 	"github.com/gorilla/websocket"
@@ -39,17 +40,17 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 
 		if resp.Operation == 0 {
 			// Operation == 0 means user is connecting
-			util.ConnMap[util.MD5(resp.Username)] = conn
+			message.ConnMap[util.MD5(resp.Username)] = conn
 			fmt.Println("user: " + resp.Username + " connected!")
 		} else if resp.Operation == 1 {
 			// Operation == 1 means user is logging out
-			delete(util.ConnMap, util.MD5(resp.Username))
+			delete(message.ConnMap, util.MD5(resp.Username))
 			fmt.Println("user: " + resp.Username + " disconnected!")
 		} else {
 			panic("Unknown Operation!")
 		}
 
-		fmt.Println(util.ConnMap)
+		fmt.Println(message.ConnMap)
 	}
 
 }
