@@ -45,7 +45,7 @@ func init() {
 
 }
 
-// Publish2Channel : 订阅redis频道并发布到util.MsgChannel
+// Publish2Channel : 订阅redis频道并发布到MsgChannel
 func Publish2Channel(rdChannel string) {
 	fmt.Println("subscribing channel <" + rdChannel + ">")
 	pubsub := rdClient.Subscribe(rdChannel) // 订阅redis频道
@@ -56,8 +56,10 @@ func Publish2Channel(rdChannel string) {
 
 	for msg := range ch {
 		fmt.Println("channel <" + rdChannel + "> published: " + msg.Payload)
-		MsgChannel <- msg.Payload // 发送消息到 util.MsgChannel
-		save2DB(msg.Payload)
+		MsgChannel <- msg.Payload // 发送消息到 MsgChannel
+		if err := save2DB(msg.Payload); err != nil {
+			fmt.Println("Failed to save to postgres, err: ", err.Error())
+		}
 	}
 }
 
