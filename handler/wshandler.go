@@ -42,13 +42,17 @@ func WSHandler(w http.ResponseWriter, r *http.Request) {
 			// Operation == 0 means user is connecting
 			message.ConnMap[util.MD5(resp.Username)] = conn
 
+			// 添加新注册用户至postgres映射
 			if _, isInMap := message.UserMap[resp.Username]; !isInMap {
 				err := message.AddMember(resp.Username)
 				if err != nil {
 					fmt.Println("Failed to add memeber, err: ", err.Error())
 				}
 				fmt.Println(message.UserMap)
+			} else {
+				fmt.Println("member alreay exists in UserMap")
 			}
+			fmt.Println(message.UserMap)
 			fmt.Println("user: " + resp.Username + " connected!")
 		} else if resp.Operation == 1 {
 			// Operation == 1 means user is logging out

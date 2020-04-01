@@ -15,16 +15,19 @@ var mutex sync.Mutex
 var botID int
 
 const (
-	host     = "localhost"
-	port     = 5432
-	user     = "postgres"
-	password = "0000"
-	dbname   = "security_framework"
+	host = "db"
+	port = 5432
+	user = "postgres"
+	// password = "0000"
+	dbname = "postgres"
 )
 
 func init() {
-	pgInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host, port, user, password, dbname)
+	// pgInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	// 	host, port, user, password, dbname)
+
+	pgInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
+		host, port, user, dbname)
 	db, _ = sql.Open("postgres", pgInfo)
 	db.SetMaxOpenConns(1000)
 
