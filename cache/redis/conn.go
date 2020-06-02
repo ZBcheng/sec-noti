@@ -4,6 +4,7 @@ import "github.com/go-redis/redis"
 
 var client *redis.Client
 
+// init : 初始化连接
 func init() {
 	client = redis.NewClient(&redis.Options{
 		Addr: "cache:6379",

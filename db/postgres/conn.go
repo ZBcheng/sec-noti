@@ -15,16 +15,14 @@ var mutex sync.Mutex
 var botID int
 
 const (
-	host = "db"
-	port = 5432
+	host = "127.0.0.1"
+	port = "db"
 	user = "postgres"
 	// password = "0000"
-	dbname = "postgres"
+	dbname = "moviesite"
 )
 
 func init() {
-	// pgInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-	// 	host, port, user, password, dbname)
 
 	pgInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable",
 		host, port, user, dbname)
