@@ -4,8 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"sec-noti/message"
-	"sec-noti/util"
+
+	"github.com/gin-gonic/gin"
+	"github.com/zbcheng/sec-noti/message"
+	"github.com/zbcheng/sec-noti/util"
 
 	"github.com/gorilla/websocket"
 )
@@ -23,8 +25,8 @@ var upgrader = websocket.Upgrader{
 }
 
 // WSHandler : websocket接口
-func WSHandler(w http.ResponseWriter, r *http.Request) {
-	conn, _ := upgrader.Upgrade(w, r, nil)
+func WSHandler(c *gin.Context) {
+	conn, _ := upgrader.Upgrade(c.Writer, c.Request, nil)
 	for {
 		_, data, err := conn.ReadMessage()
 		if err != nil {

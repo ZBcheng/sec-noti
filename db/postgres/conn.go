@@ -15,10 +15,9 @@ var mutex sync.Mutex
 var botID int
 
 const (
-	host = "127.0.0.1"
-	port = "db"
-	user = "postgres"
-	// password = "0000"
+	host   = "db"
+	port   = 5432
+	user   = "postgres"
 	dbname = "moviesite"
 )
 

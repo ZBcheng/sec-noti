@@ -1,14 +1,21 @@
 package main
 
 import (
-	"net/http"
-	"sec-noti/handler"
-	"sec-noti/message"
+	"github.com/gin-gonic/gin"
+	"github.com/zbcheng/sec-noti/handler"
+	"github.com/zbcheng/sec-noti/message"
+	"github.com/zbcheng/sec-noti/util"
 )
 
 func main() {
 	go message.Publish2Channel("bot") // 发送redis频道消息到message.MsgChannel
 	go message.WriteMessage()         // 从message.MsgChannel中读取消息并发送到前端
-	http.HandleFunc("/noti", handler.WSHandler)
-	http.ListenAndServe(":7000", nil)
+
+	router := gin.Default()
+	router.Use(util.Cors())
+
+	router.GET("/users", handler.ConnectedUsers)
+	router.GET("/noti", handler.WSHandler)
+
+	router.Run(":7000")
 }
