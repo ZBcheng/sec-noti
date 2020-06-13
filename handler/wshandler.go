@@ -41,8 +41,9 @@ func WSHandler(c *gin.Context) {
 		}
 
 		if resp.Operation == 0 {
+			
 			// Operation == 0 means user is connecting
-			message.ConnMap[util.MD5(resp.Username)] = conn
+			message.ConnMap[resp.Username] = conn
 
 			// 添加新注册用户至postgres映射
 			if _, isInMap := message.UserMap[resp.Username]; !isInMap {
@@ -56,15 +57,16 @@ func WSHandler(c *gin.Context) {
 			}
 			fmt.Println(message.UserMap)
 			fmt.Println("user: " + resp.Username + " connected!")
+
 		} else if resp.Operation == 1 {
+
 			// Operation == 1 means user is logging out
 			delete(message.ConnMap, util.MD5(resp.Username))
 			fmt.Println("user: " + resp.Username + " disconnected!")
+			
 		} else {
 			panic("Unknown Operation!")
 		}
-
 		fmt.Println(message.ConnMap)
 	}
-
 }

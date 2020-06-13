@@ -1,0 +1,9 @@
+[redis]
+host = "cache"
+port = 6379
+
+[postgres]
+host = "db"
+port = 5432
+username = "postgres"
+dbname = "postgres"

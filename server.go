@@ -14,7 +14,7 @@ func main() {
 	router := gin.Default()
 	router.Use(util.Cors())
 
-	router.GET("/users", handler.ConnectedUsers)
+	router.GET("/noti/users", handler.ConnectedUsers)
 	router.GET("/noti", handler.WSHandler)
 
 	router.Run(":7000")

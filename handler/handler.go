@@ -7,6 +7,8 @@ import (
 	"github.com/zbcheng/sec-noti/message"
 )
 
+
+
 // ConnectedUsers : 查看连接用户
 func ConnectedUsers(c *gin.Context) {
 	usernameSet := make([]string, 0)
@@ -14,9 +16,15 @@ func ConnectedUsers(c *gin.Context) {
 		usernameSet = append(usernameSet, username)
 	}
 
+	num := len(usernameSet)
+
 	c.JSON(http.StatusOK, gin.H{
-		"msg":  "",
 		"data": usernameSet,
+		"number": num,
+		"msg":  "",
 		"err":  "",
 	})
 }
+
+
+func IsAlive(c *gin.Context) {}
