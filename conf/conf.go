@@ -23,5 +23,5 @@ type pgConfig struct {
 
 // GetConfPath : 获取配置文件路径
 func GetConfPath() string {
-	return "conf/aliyun_conf.toml"
+	return "conf/conf_aliyun.toml"
 }
