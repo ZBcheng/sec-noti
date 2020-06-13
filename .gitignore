@@ -1,2 +1,7 @@
 test.go
 sec-noti
+*.tmp
+
+.vscode
+.idea
+.DS_Store

@@ -4,41 +4,24 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
-	"sync"
 
-	_ "github.com/lib/pq"
 	"github.com/BurntSushi/toml"
+	_ "github.com/lib/pq"
+	"github.com/zbcheng/sec-noti/conf"
 )
 
 var db *sql.DB
 
-var mutex sync.Mutex
-var botID int
-
-type pgConf struct {
-	host string
-	port int
-	user string
-	dbname string
-	password string
-}
-
-// const (
-// 	host   = "db"
-// 	port   = 5432
-// 	user   = "postgres"
-// 	dbname = "postgres"
-// )
-
 func init() {
-	var pg pgConf
-	confPath := "./conf_aliyun.toml"
-	if _, err := toml.DecodeFile(confPath, &pg); err != nil {
+	var config conf.Config
+	confPath := conf.GetConfPath()
+	if _, err := toml.DecodeFile(confPath, &config); err != nil {
 		fmt.Println(err)
 		return
 	}
-	pgInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
-		pg.host, pg.port, pg.user, pg.dbname, pg.password)
+
+	pgInfo := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable",
+		config.PgConf.Host, config.PgConf.Port, config.PgConf.User, config.PgConf.DBName, config.PgConf.Password)
 	db, _ = sql.Open("postgres", pgInfo)
 	db.SetMaxOpenConns(1000)
 
@@ -48,6 +31,27 @@ func init() {
 		os.Exit(1)
 	}
 
+}
+
+func loadConfig() {
+	var conf conf.Config
+	confPath := "conf/conf.toml"
+	if _, err := toml.DecodeFile(confPath, &conf); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println(conf.PgConf.Host)
+	pgInfo := fmt.Sprintf("host=%s port=%d user=%s dbname=%s password=%s sslmode=disable",
+		conf.PgConf.Host, conf.PgConf.Port, conf.PgConf.User, conf.PgConf.DBName, conf.PgConf.Password)
+	db, _ = sql.Open("postgres", pgInfo)
+	db.SetMaxOpenConns(1000)
+
+	err := db.Ping()
+	if err != nil {
+		fmt.Println("Failed to connect to postgres, err: " + err.Error())
+		os.Exit(1)
+	}
 }
 
 // DBConn : 返回pgsql连接
